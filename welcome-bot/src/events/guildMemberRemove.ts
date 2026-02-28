@@ -1,8 +1,8 @@
-import { Client, Events, GuildMember, TextChannel, EmbedBuilder } from 'discord.js';
+import { Client, Events, GuildMember, PartialGuildMember, TextChannel, EmbedBuilder } from 'discord.js';
 import { config } from '../config';
 
 export function execute(client: Client) {
-  client.on(Events.GuildMemberRemove, async (member: GuildMember) => {
+  client.on(Events.GuildMemberRemove, async (member: GuildMember | PartialGuildMember) => {
     try {
       console.log(`👋 Member left: ${member.user.tag} (${member.id})`);
       
