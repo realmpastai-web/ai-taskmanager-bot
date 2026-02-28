@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  welcome-bot:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: welcome-bot
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+    volumes:
+      # Optional: mount logs for persistence
+      - ./logs:/app/logs
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
