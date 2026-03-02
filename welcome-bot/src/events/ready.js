@@ -1,31 +1,20 @@
 const { Events, ActivityType } = require('discord.js');
 
 module.exports = {
-    name: Events.ClientReady,
-    once: true,
-    execute(client) {
-        console.log(`✅ Welcome Bot is online! Logged in as ${client.user.tag}`);
-        
-        // Set bot presence
-        client.user.setPresence({
-            activities: [
-                { 
-                    name: 'for new members 👋', 
-                    type: ActivityType.Watching 
-                }
-            ],
-            status: 'online'
-        });
+  name: Events.ClientReady,
+  once: true,
+  execute(client) {
+    console.log(`🚀 Bot is online! Logged in as ${client.user.tag}`);
+    console.log(`📊 Serving ${client.guilds.cache.size} guild(s)`);
+    
+    // Set bot activity
+    client.user.setActivity('/help | Welcoming members!', {
+      type: ActivityType.Watching
+    });
 
-        // Simple in-memory stats (can be upgraded to database for production)
-        client.stats = {
-            welcomesSent: 0,
-            rolesAssigned: 0,
-            startTime: Date.now()
-        };
-
-        console.log('📊 Stats initialized');
-        console.log(`📝 Welcome channel: ${client.config.welcomeChannelId || 'Not set'}`);
-        console.log(`🎭 Auto-role: ${client.config.autoRoleId || 'Disabled'}`);
-    }
+    // Log guild details
+    client.guilds.cache.forEach(guild => {
+      console.log(`   • ${guild.name} (${guild.id}) - ${guild.memberCount} members`);
+    });
+  }
 };

@@ -1,148 +1,156 @@
-# Welcome Bot 🤖
+# Discord Welcome Bot
 
-A professional Discord welcome bot with customizable messages, auto-roles, and logging.
+A professional Discord bot that automatically welcomes new members with customizable messages, auto-role assignment, and DM onboarding.
 
-![Node.js](https://img.shields.io/badge/Node.js-20+-green.svg)
-![Discord.js](https://img.shields.io/badge/discord.js-14.14-blue.svg)
-![License](https://img.shields.io/badge/license-MIT-yellow.svg)
+## Features
 
-## ✨ Features
+- 🎉 **Custom Welcome Messages** - Welcome users in a designated channel
+- 🏷️ **Auto-Role Assignment** - Automatically assign roles to new members
+- 📩 **DM Onboarding** - Send personalized welcome DMs with server info
+- ⚙️ **Easy Configuration** - Simple environment-based setup
+- 🐳 **Docker Ready** - One-command deployment with Docker
+- 📝 **Slash Commands** - Modern Discord slash command interface
 
-- 🎉 **Auto-welcome new members** with customizable messages
-- 📝 **Join/leave logging** to a dedicated channel
-- 🏷️ **Auto-role assignment** for new members
-- 📩 **Optional DM welcome** with server info
-- 💬 **Slash commands** for admin management
-- 🐳 **Docker ready** for easy deployment
+## Premium Features (Coming Soon)
 
-## 🚀 Quick Start
+- Custom welcome card images
+- Advanced role assignment rules
+- Welcome message analytics
+- Multi-language support
+- Custom embed designs
+
+## Quick Start
 
 ### Prerequisites
 
 - Node.js 18+ or Docker
-- Discord Bot Token ([get one here](https://discord.com/developers/applications))
+- Discord Bot Token ([Get one here](https://discord.com/developers/applications))
+
+### Environment Setup
+
+1. Copy `.env.example` to `.env`:
+```bash
+cp .env.example .env
+```
+
+2. Fill in your Discord bot token and configuration:
+```env
+DISCORD_TOKEN=your_bot_token_here
+WELCOME_CHANNEL_ID=your_welcome_channel_id
+AUTO_ROLE_ID=role_id_to_assign (optional)
+ENABLE_DM_WELCOME=true
+SERVER_NAME=Your Server Name
+```
 
 ### Installation
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/quantbitrealmSimon/discord-bots.git
-   cd discord-bots/welcome-bot
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Configure environment**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your settings
-   ```
-
-4. **Deploy slash commands**
-   ```bash
-   npm run build
-   npx ts-node src/deploy-commands.ts
-   ```
-
-5. **Start the bot**
-   ```bash
-   npm start
-   ```
-
-## 🐳 Docker Deployment
+#### Option 1: Docker (Recommended)
 
 ```bash
-# Build and run with docker-compose
 docker-compose up -d
-
-# Or with Docker directly
-docker build -t welcome-bot .
-docker run -d --env-file .env --name welcome-bot welcome-bot
 ```
 
-## ⚙️ Configuration
+#### Option 2: Local Node.js
 
-Edit `.env` with your settings:
-
-```env
-DISCORD_TOKEN=your_bot_token_here
-CLIENT_ID=your_client_id_here
-WELCOME_CHANNEL_ID=your_channel_id_here
-
-# Optional settings
-LOG_CHANNEL_ID=your_log_channel_id
-AUTO_ROLE_ID=role_id_for_new_members
-ENABLE_DM_WELCOME=true
-
-# Message customization
-WELCOME_MESSAGE=🎉 Welcome {user} to **{server}**! You are our **{count}th** member!
+```bash
+npm install
+npm run build
+npm start
 ```
 
-### Placeholders
+#### Option 3: Development Mode
 
-- `{user}` - Mentions the new member
-- `{username}` - The user's name
-- `{server}` - Server name
-- `{count}` - Current member count
+```bash
+npm install
+npm run dev
+```
 
-## 📋 Commands
+## Discord Bot Setup
+
+1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
+2. Create a new application
+3. Go to "Bot" section and enable these intents:
+   - Server Members Intent (for welcome events)
+   - Message Content Intent
+4. Copy your bot token to `.env`
+5. Go to "OAuth2" → "URL Generator":
+   - Select `bot` scope
+   - Select `Send Messages`, `Manage Roles`, `Read Message History` permissions
+   - Copy the generated URL and invite the bot to your server
+
+## Bot Invite Link Template
+
+```
+https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=268435456&scope=bot%20applications.commands
+```
+
+**Required Permissions:**
+- `Send Messages` - To send welcome messages
+- `Manage Roles` - To assign auto-roles (if enabled)
+- `Read Message History` - To read commands
+
+## Commands
 
 | Command | Description | Permission |
 |---------|-------------|------------|
 | `/ping` | Check bot latency | Everyone |
-| `/help` | View bot info | Everyone |
-| `/welcome` | Preview welcome message | Administrator |
-| `/config` | View bot configuration | Administrator |
+| `/help` | Show help information | Everyone |
+| `/welcome test` | Test welcome message (sends to you) | Admin |
+| `/welcome setchannel` | Set welcome channel | Admin |
+| `/welcome setmessage` | Set custom welcome message | Admin |
 
-## 🔗 Invite Link
-
-Generate your bot invite link:
-
-```
-https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID&permissions=268435520&scope=bot%20applications.commands
-```
-
-**Required Permissions:**
-- Send Messages
-- View Channels
-- Manage Roles (for auto-role)
-- Use Slash Commands
-
-## 📁 Project Structure
+## Project Structure
 
 ```
 welcome-bot/
 ├── src/
-│   ├── commands/        # Slash commands
-│   ├── events/          # Event handlers (join/leave)
-│   ├── utils/           # Helper functions
-│   ├── config.ts        # Configuration loader
-│   ├── deploy-commands.ts  # Register slash commands
-│   └── index.ts         # Entry point
-├── .env.example         # Environment template
-├── docker-compose.yml   # Docker compose config
-├── Dockerfile           # Docker build
-└── package.json         # Dependencies
+│   ├── commands/          # Slash commands
+│   │   ├── ping.ts
+│   │   ├── help.ts
+│   │   └── welcome.ts
+│   ├── events/            # Event handlers
+│   │   ├── ready.ts
+│   │   ├── guildMemberAdd.ts
+│   │   └── interactionCreate.ts
+│   ├── services/          # Business logic
+│   ├── utils/             # Helpers
+│   ├── config.ts          # Configuration
+│   └── index.ts           # Entry point
+├── dist/                  # Compiled output
+├── .env.example
+├── .gitignore
+├── docker-compose.yml
+├── Dockerfile
+├── package.json
+├── tsconfig.json
+└── README.md
 ```
 
-## 💎 Premium Features
+## Troubleshooting
 
-Upgrade to premium for:
-- Custom embed welcome messages
-- Welcome images/banners
-- Role selection on join
-- Advanced analytics
-- Priority support
+### Bot not responding?
+- Check that the bot token is correct
+- Ensure the bot has proper permissions in the server
+- Verify required intents are enabled in Developer Portal
 
-Contact for premium access!
+### Welcome messages not sending?
+- Check that `WELCOME_CHANNEL_ID` is correct
+- Ensure bot has permission to send messages in that channel
+- Check bot logs for errors
 
-## 📝 License
+### Auto-role not working?
+- Bot role must be higher than the auto-role in server hierarchy
+- Verify `AUTO_ROLE_ID` is correct
+- Check bot has "Manage Roles" permission
 
-MIT License - See [LICENSE](../LICENSE) for details.
+## License
+
+MIT License - feel free to use for personal or commercial projects.
+
+## Support
+
+For issues or feature requests, please open an issue on GitHub.
 
 ---
 
-Built with ❤️ by [QuantBitRealm](https://github.com/quantbitrealmSimon)
+Built with ❤️ by QuantBitRealm

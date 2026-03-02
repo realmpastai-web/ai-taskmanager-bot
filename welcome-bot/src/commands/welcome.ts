@@ -1,34 +1,50 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder } from 'discord.js';
-import { config } from '../config';
-import { formatWelcomeMessage } from '../utils/formatMessage';
+import { 
+  SlashCommandBuilder, 
+  ChatInputCommandInteraction, 
+  PermissionFlagsBits,
+  GuildMember 
+} from 'discord.js';
+import { Command } from '../types';
+import { sendWelcomeMessage, sendDMWelcome, assignAutoRole } from '../services/welcomeService';
 
-export const data = new SlashCommandBuilder()
-  .setName('welcome')
-  .setDescription('Preview the welcome message (Admin only)')
-  .setDefaultMemberPermissions(0x00000008); // Administrator permission
-
-export async function execute(interaction: ChatInputCommandInteraction) {
-  const memberCount = interaction.guild?.memberCount || 0;
+const command: Command = {
+  data: new SlashCommandBuilder()
+    .setName('welcome')
+    .setDescription('Welcome bot management commands')
+    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+    .addSubcommand(subcommand =>
+      subcommand
+        .setName('test')
+        .setDescription('Test the welcome message (sends to you)')
+    ) as SlashCommandBuilder,
   
-  const welcomeText = formatWelcomeMessage(
-    config.messages.welcome,
-    interaction.user,
-    interaction.guild?.name || 'Server',
-    memberCount
-  );
-  
-  const embed = new EmbedBuilder()
-    .setColor(0x00FF00)
-    .setTitle('👋 Welcome Preview')
-    .setDescription('This is how new members will see the welcome message:')
-    .addFields(
-      { name: 'Message', value: welcomeText },
-      { name: 'Channel', value: `<#${config.channels.welcome}>`, inline: true },
-      { name: 'Auto-Role', value: config.roles.autoRole ? `<@&${config.roles.autoRole}>` : 'Disabled', inline: true }
-    )
-    .setThumbnail(interaction.user.displayAvatarURL())
-    .setFooter({ text: 'Welcome Bot v1.0' })
-    .setTimestamp();
+  async execute(interaction: ChatInputCommandInteraction) {
+    const subcommand = interaction.options.getSubcommand();
     
-  await interaction.reply({ embeds: [embed], ephemeral: true });
-}
+    if (subcommand === 'test') {
+      await interaction.reply({ content: 'Testing welcome system...', ephemeral: true });
+      
+      try {
+        // Simulate welcome for the command user
+        const member = interaction.member as GuildMember;
+        
+        await sendWelcomeMessage(member);
+        await assignAutoRole(member);
+        await sendDMWelcome(member);
+        
+        await interaction.followUp({ 
+          content: '✅ Welcome test completed! Check the welcome channel and your DMs.', 
+          ephemeral: true 
+        });
+      } catch (error) {
+        console.error('Test welcome error:', error);
+        await interaction.followUp({ 
+          content: '❌ Test failed. Check console for details.', 
+          ephemeral: true 
+        });
+      }
+    }
+  },
+};
+
+export default command;

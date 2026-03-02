@@ -1,66 +1,59 @@
-import { Client, GatewayIntentBits, Partials, Collection } from 'discord.js';
+import { Client, GatewayIntentBits, Collection } from 'discord.js';
 import { config } from './config';
-import { loadEvents } from './utils/eventLoader';
 import { loadCommands } from './utils/commandLoader';
+import { loadEvents } from './utils/eventLoader';
 
-// Create client with necessary intents
+// Create Discord client with required intents
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
     GatewayIntentBits.GuildMembers,
     GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.DirectMessages,
   ],
-  partials: [Partials.Channel],
 });
 
-// Store commands
+// Store commands in a collection
 client.commands = new Collection();
 
-// Bot startup
-async function start() {
+// Initialize bot
+async function main() {
   try {
     console.log('🚀 Starting Welcome Bot...');
     
-    // Load commands
+    // Load commands and events
     await loadCommands(client);
-    
-    // Load events
     await loadEvents(client);
     
     // Login to Discord
-    await client.login(config.discord.token);
+    await client.login(config.discordToken);
     
-    console.log('✅ Bot started successfully');
   } catch (error) {
     console.error('❌ Failed to start bot:', error);
     process.exit(1);
   }
 }
 
-// Graceful shutdown
-process.on('SIGINT', () => {
-  console.log('\n🛑 Shutting down gracefully...');
-  client.destroy();
-  process.exit(0);
-});
-
-process.on('SIGTERM', () => {
-  console.log('\n🛑 Shutting down gracefully...');
-  client.destroy();
-  process.exit(0);
-});
-
 // Handle uncaught errors
 process.on('unhandledRejection', (error) => {
   console.error('Unhandled promise rejection:', error);
 });
 
-start();
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught exception:', error);
+  process.exit(1);
+});
 
-// Type augmentation for commands collection
-declare module 'discord.js' {
-  interface Client {
-    commands: Collection<string, any>;
-  }
-}
+// Graceful shutdown
+process.on('SIGTERM', async () => {
+  console.log('SIGTERM received, shutting down gracefully...');
+  client.destroy();
+  process.exit(0);
+});
+
+process.on('SIGINT', async () => {
+  console.log('SIGINT received, shutting down gracefully...');
+  client.destroy();
+  process.exit(0);
+});
+
+main();

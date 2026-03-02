@@ -1,31 +1,32 @@
-import { Client, Events, ChatInputCommandInteraction } from 'discord.js';
+import { Interaction, ChatInputCommandInteraction } from 'discord.js';
 
-export function execute(client: Client) {
-  client.on(Events.InteractionCreate, async (interaction) => {
+export default {
+  name: 'interactionCreate',
+  once: false,
+  async execute(interaction: Interaction) {
+    // Only handle chat input command interactions
     if (!interaction.isChatInputCommand()) return;
     
-    const command = client.commands.get(interaction.commandName);
+    const commandInteraction = interaction as ChatInputCommandInteraction;
+    const command = interaction.client.commands.get(commandInteraction.commandName);
     
     if (!command) {
-      console.warn(`Command not found: ${interaction.commandName}`);
+      console.warn(`⚠️ Command not found: ${commandInteraction.commandName}`);
       return;
     }
     
     try {
-      await command.execute(interaction);
+      await command.execute(commandInteraction);
     } catch (error) {
-      console.error(`Error executing command ${interaction.commandName}:`, error);
+      console.error(`❌ Error executing command ${commandInteraction.commandName}:`, error);
       
-      const reply = {
-        content: '❌ There was an error executing this command!',
-        ephemeral: true
-      };
+      const errorMessage = '❌ An error occurred while executing this command.';
       
-      if (interaction.replied || interaction.deferred) {
-        await interaction.followUp(reply);
+      if (commandInteraction.replied || commandInteraction.deferred) {
+        await commandInteraction.followUp({ content: errorMessage, ephemeral: true });
       } else {
-        await interaction.reply(reply);
+        await commandInteraction.reply({ content: errorMessage, ephemeral: true });
       }
     }
-  });
-}
+  },
+};

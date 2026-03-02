@@ -1,68 +1,76 @@
 const { Events, EmbedBuilder } = require('discord.js');
 
 module.exports = {
-    name: Events.GuildMemberAdd,
-    async execute(member, client) {
-        const config = client.config;
-        
-        console.log(`👋 New member joined: ${member.user.tag} (${member.id})`);
+  name: Events.GuildMemberAdd,
+  async execute(member, client) {
+    try {
+      console.log(`👋 New member joined: ${member.user.tag} in ${member.guild.name}`);
 
-        // 1. Assign auto-role if configured
-        if (config.autoRoleId) {
-            try {
-                const role = member.guild.roles.cache.get(config.autoRoleId);
-                if (role) {
-                    await member.roles.add(role);
-                    console.log(`🎭 Assigned role "${role.name}" to ${member.user.tag}`);
-                    if (client.stats) client.stats.rolesAssigned++;
-                } else {
-                    console.warn(`⚠️ Auto-role ${config.autoRoleId} not found in guild`);
-                }
-            } catch (error) {
-                console.error(`❌ Failed to assign role to ${member.user.tag}:`, error.message);
-            }
+      // Get configuration from environment variables
+      const welcomeChannelId = process.env.WELCOME_CHANNEL_ID;
+      const autoRoleId = process.env.AUTO_ROLE_ID;
+      const dmWelcomeEnabled = process.env.DM_WELCOME_ENABLED === 'true';
+
+      // 1. Send welcome message to channel
+      if (welcomeChannelId) {
+        const welcomeChannel = member.guild.channels.cache.get(welcomeChannelId);
+        if (welcomeChannel) {
+          const welcomeEmbed = new EmbedBuilder()
+            .setColor(0x00FF88)
+            .setTitle('🎉 Welcome to the Server!')
+            .setDescription(
+              `Hey ${member.user}, welcome to **${member.guild.name}**!\n\n` +
+              `We're glad to have you here. Enjoy your stay! 🚀`
+            )
+            .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
+            .addFields(
+              { name: '📊 Member Count', value: `${member.guild.memberCount}`, inline: true },
+              { name: '🆔 User ID', value: `${member.id}`, inline: true },
+              { name: '📅 Account Created', value: `<t:${Math.floor(member.user.createdTimestamp / 1000)}:R>`, inline: true }
+            )
+            .setTimestamp()
+            .setFooter({ text: `User #${member.guild.memberCount}` });
+
+          await welcomeChannel.send({ embeds: [welcomeEmbed] });
+          console.log(`   ✅ Welcome message sent to #${welcomeChannel.name}`);
+        } else {
+          console.log(`   ⚠️ Welcome channel not found: ${welcomeChannelId}`);
         }
+      }
 
-        // 2. Send welcome message to channel
-        if (config.welcomeChannelId) {
-            try {
-                const channel = await member.guild.channels.fetch(config.welcomeChannelId);
-                if (channel && channel.isTextBased()) {
-                    const welcomeText = config.welcomeMessage.replace(/{user}/g, `<@${member.id}>`);
-                    
-                    const embed = new EmbedBuilder()
-                        .setColor(0x00FF88)
-                        .setTitle('👋 Welcome to the Server!')
-                        .setDescription(welcomeText)
-                        .setThumbnail(member.user.displayAvatarURL({ dynamic: true }))
-                        .addFields(
-                            { name: '📊 Member Count', value: `${member.guild.memberCount}`, inline: true },
-                            { name: '📅 Account Created', value: `<t:${Math.floor(member.user.createdTimestamp / 1000)}:R>`, inline: true }
-                        )
-                        .setTimestamp()
-                        .setFooter({ 
-                            text: `User ID: ${member.id}`, 
-                            iconURL: member.guild.iconURL({ dynamic: true }) 
-                        });
-
-                    await channel.send({ embeds: [embed] });
-                    console.log(`💬 Welcome message sent to #${channel.name}`);
-                    if (client.stats) client.stats.welcomesSent++;
-                }
-            } catch (error) {
-                console.error(`❌ Failed to send welcome message:`, error.message);
-            }
+      // 2. Assign auto-role (if configured)
+      if (autoRoleId) {
+        try {
+          const role = member.guild.roles.cache.get(autoRoleId);
+          if (role) {
+            await member.roles.add(role);
+            console.log(`   ✅ Auto-role "${role.name}" assigned`);
+          } else {
+            console.log(`   ⚠️ Auto-role not found: ${autoRoleId}`);
+          }
+        } catch (roleError) {
+          console.error(`   ❌ Failed to assign role:`, roleError.message);
         }
+      }
 
-        // 3. Send DM welcome if enabled (Premium feature placeholder)
-        if (config.enableDMWelcome) {
-            try {
-                const dmText = config.dmWelcomeMessage.replace(/{user}/g, member.user.username);
-                await member.send(dmText);
-                console.log(`📩 DM welcome sent to ${member.user.tag}`);
-            } catch (error) {
-                console.log(`⚠️ Could not DM ${member.user.tag} (DMs disabled or blocked)`);
-            }
+      // 3. Send DM welcome (if enabled)
+      if (dmWelcomeEnabled) {
+        try {
+          const dmMessage = process.env.DM_WELCOME_MESSAGE || 
+            `Welcome to ${member.guild.name}! 🎉\n\n` +
+            `Thanks for joining. If you have any questions, feel free to ask the staff team.`;
+
+          await member.send(dmMessage);
+          console.log(`   ✅ Welcome DM sent`);
+        } catch (dmError) {
+          console.log(`   ⚠️ Could not send DM (user has DMs disabled)`);
         }
+      }
+
+      console.log(`✨ Welcome process completed for ${member.user.tag}`);
+
+    } catch (error) {
+      console.error('❌ Error in guildMemberAdd event:', error);
     }
+  }
 };

@@ -1,27 +1,26 @@
-import { SlashCommandBuilder, ChatInputCommandInteraction, EmbedBuilder, PermissionFlagsBits } from 'discord.js';
+import { SlashCommandBuilder, ChatInputCommandInteraction } from 'discord.js';
+import { Command } from '../types';
 
-export const data = new SlashCommandBuilder()
-  .setName('ping')
-  .setDescription('Check if the bot is online and view latency');
-
-export async function execute(interaction: ChatInputCommandInteraction) {
-  const sent = await interaction.reply({ 
-    content: '🏓 Pinging...', 
-    fetchReply: true,
-    ephemeral: true 
-  });
+const command: Command = {
+  data: new SlashCommandBuilder()
+    .setName('ping')
+    .setDescription('Check bot latency and API response time'),
   
-  const latency = sent.createdTimestamp - interaction.createdTimestamp;
-  const apiLatency = Math.round(interaction.client.ws.ping);
-  
-  const embed = new EmbedBuilder()
-    .setColor(0x00FF00)
-    .setTitle('🏓 Pong!')
-    .addFields(
-      { name: 'Bot Latency', value: `${latency}ms`, inline: true },
-      { name: 'API Latency', value: `${apiLatency}ms`, inline: true }
-    )
-    .setTimestamp();
+  async execute(interaction: ChatInputCommandInteraction) {
+    const sent = await interaction.reply({ 
+      content: 'Pinging...', 
+      fetchReply: true 
+    });
     
-  await interaction.editReply({ content: '', embeds: [embed] });
-}
+    const latency = sent.createdTimestamp - interaction.createdTimestamp;
+    const apiLatency = Math.round(interaction.client.ws.ping);
+    
+    await interaction.editReply(
+      `🏓 Pong!\n` +
+      `⏱️ Bot Latency: **${latency}ms**\n` +
+      `🌐 API Latency: **${apiLatency}ms**`
+    );
+  },
+};
+
+export default command;
