@@ -1,0 +1,33 @@
+{
+  "$schema": "https://railway.app/railway.schema.json",
+  "name": "QuantBitRealm Discord Bots",
+  "description": "Production-ready Discord bots with one-click deployment",
+  "categories": ["Discord", "Bots", "Node.js"],
+  "icon": "https://discord.com/assets/3437c10597c1526c3dbd98c737c2bcae.svg",
+  "readme": "https://github.com/realmpastai-web/ai-taskmanager-bot/blob/main/RAILWAY_DEPLOY.md",
+  "website": "https://realmpastai-web.github.io/ai-taskmanager-bot/",
+  "env": {
+    "DISCORD_TOKEN": {
+      "description": "Your Discord bot token from https://discord.com/developers/applications",
+      "required": true
+    },
+    "DISCORD_CLIENT_ID": {
+      "description": "Your Discord application client ID",
+      "required": true
+    },
+    "NODE_ENV": {
+      "description": "Environment mode",
+      "default": "production"
+    }
+  },
+  "build": {
+    "builder": "NIXPACKS"
+  },
+  "deploy": {
+    "startCommand": "node src/index.js",
+    "healthcheckPath": "/health",
+    "healthcheckTimeout": 30,
+    "restartPolicyType": "ON_FAILURE",
+    "restartPolicyMaxRetries": 10
+  }
+}
