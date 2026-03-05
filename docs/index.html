@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuantBitRealm - Premium Discord Bots</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #5865F2;
+            --primary-dark: #4752C4;
+            --secondary: #57F287;
+            --dark: #1a1b1e;
+            --darker: #121214;
+            --card: #25262b;
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --gradient: linear-gradient(135deg, #5865F2 0%, #57F287 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            background: var(--dark);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
+            color: var(--text);
+        }
+        
+        .cta-button {
+            background: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        /* Hero */
+        .hero {
+            padding: 6rem 0;
+            text-align: center;
+            background: radial-gradient(ellipse at top, rgba(88, 101, 242, 0.15) 0%, transparent 50%);
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+        
+        .hero h1 span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--secondary);
+        }
+        
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+        
+        /* Bots Section */
+        .bots {
+            padding: 6rem 0;
+            background: var(--dark);
+        }
+        
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .section-header p {
+            color: var(--text-muted);
+            font-size: 1.125rem;
+        }
+        
+        .bots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+        
+        .bot-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .bot-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .bot-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(88, 101, 242, 0.3);
+        }
+        
+        .bot-card:hover::before {
+            opacity: 1;
+        }
+        
+        .bot-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .bot-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .bot-card .price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+        
+        .bot-card .description {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        
+        .features-list {
+            list-style: none;
+            margin-bottom: 1.5rem;
+        }
+        
+        .features-list li {
+            padding: 0.5rem 0;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .features-list li::before {
+            content: '✓';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+        
+        .bot-card .cta-button {
+            width: 100%;
+            text-align: center;
+            display: block;
+        }
+        
+        /* Bundles */
+        .bundles {
+            padding: 6rem 0;
+        }
+        
+        .bundles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .bundle-card {
+            background: var(--card);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 2px solid transparent;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .bundle-card.featured {
+            border-color: var(--primary);
+            position: relative;
+        }
+        
+        .bundle-card.featured::before {
+            content: 'MOST POPULAR';
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+        
+        .bundle-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .bundle-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .bundle-card .price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 1rem 0;
+        }
+        
+        .bundle-card .savings {
+            color: var(--secondary);
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .bundle-card ul {
+            list-style: none;
+            text-align: left;
+            margin: 1.5rem 0;
+        }
+        
+        .bundle-card li {
+            padding: 0.5rem 0;
+            color: var(--text-muted);
+        }
+        
+        /* Why Choose Us */
+        .why-us {
+            padding: 6rem 0;
+            background: var(--dark);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .feature {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(88, 101, 242, 0.1);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+        
+        .feature h4 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 6rem 0;
+            text-align: center;
+            background: radial-gradient(ellipse at center, rgba(88, 101, 242, 0.1) 0%, transparent 70%);
+        }
+        
+        .cta-section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .cta-section p {
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.125rem;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--darker);
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 3rem 0;
+            text-align: center;
+        }
+        
+        footer p {
+            color: var(--text-muted);
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            color: var(--text);
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .stats {
+                flex-direction: column;
+                gap: 2rem;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .bots-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo">QuantBitRealm</div>
+            <ul class="nav-links">
+                <li><a href="#bots">Bots</a></li>
+                <li><a href="#bundles">Bundles</a></li>
+                <li><a href="#why-us">Why Us</a></li>
+            </ul>
+            <a href="mailto:quantbitrealm@gmail.com" class="cta-button">Contact Sales</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <h1>Premium Discord Bots <span>Ready to Deploy</span></h1>
+            <p>Production-ready Discord bots with source code, Docker configs, and commercial licenses. Start monetizing your community today.</p>
+            <div class="hero-buttons">
+                <a href="#bots" class="cta-button">View Bots</a>
+                <a href="#bundles" class="cta-button btn-secondary">View Bundles</a>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number">5</div>
+                    <div class="stat-label">Premium Bots</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Commands</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">24h</div>
+                    <div class="stat-label">Delivery</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bots" id="bots">
+        <div class="container">
+            <div class="section-header">
+                <h2>Our Bot Collection</h2>
+                <p>Choose from our selection of production-ready Discord bots</p>
+            </div>
+            <div class="bots-grid">
+                <div class="bot-card">
+                    <div class="bot-icon">📊</div>
+                    <h3>ServerStats Pro</h3>
+                    <div class="price">$150</div>
+                    <p class="description">Real-time Discord server analytics with member tracking, activity charts, and data export.</p>
+                    <ul class="features-list">
+                        <li>Member growth tracking</li>
+                        <li>Message activity charts</li>
+                        <li>CSV/JSON export</li>
+                        <li>Top users leaderboard</li>
+                        <li>6 slash commands</li>
+                    </ul>
+                    <a href="mailto:quantbitrealm@gmail.com?subject=Interested in ServerStats Pro" class="cta-button">Get Started</a>
+                </div>
+
+                <div class="bot-card">
+                    <div class="bot-icon">🎫</div>
+                    <h3>Ticket Support Bot</h3>
+                    <div class="price">$150</div>
+                    <p class="description">Complete customer support system with ticket categories, team assignment, and transcripts.</p>
+                    <ul class="features-list">
+                        <li>Multiple ticket categories</li>
+                        <li>Team claiming system</li>
+                        <li>Conversation transcripts</li>
+                        <li>Priority levels</li>
+                        <li>9 slash commands</li>
+                    </ul>
+                    <a href="mailto:quantbitrealm@gmail.com?subject=Interested in Ticket Support Bot" class="cta-button">Get Started</a>
+                </div>
+
+                <div class="bot-card">
+                    <div class="bot-icon">🛡️</div>
+                    <h3>Auto-Moderator Pro</h3>
+                    <div class="price">$175</div>
+                    <p class="description">AI-powered auto-moderation with 8 filters, raid protection, and smart punishment escalation.</p>
+                    <ul class="features-list">
+                        <li>8 auto-mod filters</li>
+                        <li>Raid protection</li>
+                        <li>Violation tracking</li>
+                        <li>Mod log integration</li>
+                        <li>12 slash commands</li>
+                    </ul>
+                    <a href="mailto:quantbitrealm@gmail.com?subject=Interested in Auto-Moderator Pro" class="cta-button">Get Started</a>
+                </div>
+
+                <div class="bot-card">
+                    <div class="bot-icon">🏠</div>
+                    <h3>RealEstate Lead Bot</h3>
+                    <div class="price">$200</div>
+                    <p class="description">Lead capture and management for real estate agents with property listings and CRM integration.</p>
+                    <ul class="features-list">
+                        <li>Property listings</li>
+                        <li>Lead capture forms</li>
+                        <li>Appointment scheduling</li>
+                        <li>Lead notifications</li>
+                        <li>CRM integration ready</li>
+                    </ul>
+                    <a href="mailto:quantbitrealm@gmail.com?subject=Interested in RealEstate Lead Bot" class="cta-button">Get Started</a>
+                </div>
+
+                <div class="bot-card">
+                    <div class="bot-icon">🎁</div>
+                    <h3>Giveaway Pro Bot</h3>
+                    <div class="price">$125</div>
+                    <p class="description">Professional giveaways with requirements, multiple winners, reroll functionality, and analytics.</p>
+                    <ul class="features-list">
+                        <li>Role requirements</li>
+                        <li>Multiple winners</li>
+                        <li>Reroll functionality</li>
+                        <li>Entry tracking</li>
+                        <li>6 slash commands</li>
+                    </ul>
+                    <a href="mailto:quantbitrealm@gmail.com?subject=Interested in Giveaway Pro Bot" class="cta-button">Get Started</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bundles" id="bundles">
+        <div class="container">
+            <div class="section-header">
+                <h2>Bundle Deals</h2>
+                <p>Save big when you buy multiple bots</p>
+            </div>
+            <div class="bundles-grid">
+                <div class="bundle-card">
+                    <h3>Starter Bundle</h3>
+                    <div class="price">$250</div>
+                    <div class="savings">Save $50</div>
+                    <p>Choose any 2 bots</p>
+                    <ul>
+                        <li>✓ Source code for both</li>
+                        <li>✓ Docker configs</li>
+                        <li>✓ Setup guides</li>
+                        <li>✓ 6 months support</li>
+                    </ul>
+                    <a href="mailto:quantbitrealm@gmail.com?subject=Interested in Starter Bundle" class="cta-button">Choose Bots</a>
+                </div>
+
+                <div class="bundle-card featured">
+                    <h3>Ultimate Bundle</h3>
+                    <div class="price">$600</div>
+                    <div class="savings">Save $200</div>
+                    <p>All 5 bots included</p>
+                    <ul>
+                        <li>✓ All 5 bot source codes</li>
+                        <li>✓ Complete deployment configs</li>
+                        <li>✓ Priority support</li>
+                        <li>✓ Free updates for 1 year</li>
+                    </ul>
+                    <a href="mailto:quantbitrealm@gmail.com?subject=Interested in Ultimate Bundle" class="cta-button">Get All Bots</a>
+                </div>
+
+                <div class="bundle-card">
+                    <h3>Agency Bundle</h3>
+                    <div class="price">$1,000</div>
+                    <div class="savings">Save $350</div>
+                    <p>All bots + Commercial licenses</p>
+                    <ul>
+                        <li>✓ Everything in Ultimate</li>
+                        <li>✓ Commercial licenses</li>
+                        <li>✓ White-label rights</li>
+                        <li>✓ Client deployment rights</li>
+                    </ul>
+                    <a href="mailto:quantbitrealm@gmail.com?subject=Interested in Agency Bundle" class="cta-button">Go Agency</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="why-us" id="why-us">
+        <div class="container">
+            <div class="section-header">
+                <h2>Why Choose Our Bots?</h2>
+                <p>Production-ready solutions that save you time and money</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">⚡</div>
+                    <div>
+                        <h4>Ready to Deploy</h4>
+                        <p>Each bot comes with Docker configs, Railway setup, and complete documentation. Deploy in minutes, not days.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🔒</div>
+                    <div>
+                        <h4>Full Source Code</h4>
+                        <p>Get complete access to the source code. Customize, extend, and make it your own. No black boxes.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🚀</div>
+                    <div>
+                        <h4>Modern Tech Stack</h4>
+                        <p>Built with discord.js v14, SQLite, and Node.js. Professional code structure with logging and error handling.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💼</div>
+                    <div>
+                        <h4>Commercial License</h4>
+                        <p>Use for clients, resell, or white-label. Our commercial license gives you full business flexibility.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🛠️</div>
+                    <div>
+                        <h4>6 Months Support</h4>
+                        <p>Get help when you need it. Bug fixes, setup assistance, and guidance included with every purchase.</p>
+                    </div>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📈</div>
+                    <div>
+                        <h4>Proven Revenue</h4>
+                        <p>These bots are built to generate revenue. Join others already monetizing their communities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Start?</h2>
+            <p>Get your bot delivered within 24 hours. Start monetizing your community today.</p>
+            <a href="mailto:quantbitrealm@gmail.com" class="cta-button">Contact Sales</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-links">
+                <a href="https://github.com/realmpastai-web" target="_blank">GitHub</a>
+                <a href="mailto:quantbitrealm@gmail.com">Email</a>
+            </div>
+            <p>&copy; 2026 QuantBitRealm. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
