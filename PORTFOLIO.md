@@ -104,6 +104,26 @@
 
 ---
 
+### 6. AI Community Assistant - $199
+**AI-powered Discord community assistant with chat, translation & moderation**
+
+**Features:**
+- 🤖 AI-powered chat with GPT-4 integration for smart Q&A
+- 🌐 Multi-language translation (12 languages) with `/translate`
+- 👋 AI welcome messages for new members with `/welcome-config`
+- 🛡️ Auto-moderation with spam/toxicity detection via `/moderation-config`
+- 📊 Community analytics and engagement stats with `/community-stats`
+- 📝 Conversation summarization with `/summarize`
+- 🧠 Knowledge base learning with `/learn` command
+
+**Perfect for:** International communities, support servers, educational groups, AI enthusiasts
+
+**Tech Stack:** discord.js v14, SQLite, OpenAI GPT-4, Winston logging
+
+**Includes:** Source code, Docker config, 8 slash commands, AI integration, deployment guide
+
+---
+
 ## 💰 Pricing & Licensing
 
 | Bot | Personal License | Commercial License |
@@ -113,6 +133,7 @@
 | Auto-Moderator Pro | $175 | +$125 |
 | RealEstate Lead Bot | $200 | +$150 |
 | Giveaway Pro Bot | $125 | +$75 |
+| AI Community Assistant | $199 | +$125 |
 
 **Personal License:** Use on your own servers, modify for personal use
 **Commercial License:** Resell, use for clients, white-label rights
@@ -127,16 +148,16 @@ Choose any 2 bots from the catalog
 ### Pro Bundle (3 Bots) - $375 (Save $100)
 Choose any 3 bots from the catalog
 
-### Ultimate Bundle (All 5 Bots) - $600 (Save $200)
-Get all 5 bots with:
+### Ultimate Bundle (All 6 Bots) - $750 (Save $250)
+Get all 6 bots with:
 - Complete source code for each
 - All deployment configs
 - Priority support
 - Free updates for 1 year
 
-### Agency Bundle (All 5 + Commercial) - $1,000 (Save $350)
+### Agency Bundle (All 6 + Commercial) - $1,200 (Save $450)
 Everything in Ultimate Bundle PLUS:
-- Commercial licenses for all 5 bots
+- Commercial licenses for all 6 bots
 - White-label rights
 - Client deployment rights
 - Priority support with 12-hour response
@@ -197,9 +218,9 @@ bot-name/
 | Single Bot | $125-200 | 5 | $750-1,000 |
 | Starter Bundle | $250 | 3 | $750 |
 | Pro Bundle | $375 | 2 | $750 |
-| Ultimate Bundle | $600 | 2 | $1,200 |
-| Agency Bundle | $1,000 | 1 | $1,000 |
-| **Total Potential** | | | **$3,450-4,700/mo** |
+| Ultimate Bundle | $750 | 2 | $1,500 |
+| Agency Bundle | $1,200 | 1 | $1,200 |
+| **Total Potential** | | | **$4,450-5,700/mo** |
 
 ---
 
@@ -233,6 +254,7 @@ Need a custom bot? I can build:
 | Auto-Moderator Pro | ✅ | ✅ | ✅ | ✅ | ✅ | Ready |
 | RealEstate Lead Bot | ✅ | ✅ | ✅ | ✅ | ✅ | Ready |
 | Giveaway Pro Bot | ✅ | ✅ | ✅ | ✅ | ✅ | Ready |
+| AI Community Assistant | ✅ | ✅ | ✅ | ✅ | ✅ | Ready |
 
 ---
 
