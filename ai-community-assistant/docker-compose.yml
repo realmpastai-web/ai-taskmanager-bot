@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  bot:
+    build: .
+    container_name: ai-community-assistant
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - CLIENT_ID=${CLIENT_ID}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_MODEL=${OPENAI_MODEL:-gpt-4}
+      - BOT_ACTIVITY=${BOT_ACTIVITY:-Helping communities}
+      - DATABASE_PATH=${DATABASE_PATH:-./data/bot.db}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - AI_TEMPERATURE=${AI_TEMPERATURE:-0.7}
+      - MAX_RESPONSE_LENGTH=${MAX_RESPONSE_LENGTH:-2000}
+      - WELCOME_CHANNEL_ID=${WELCOME_CHANNEL_ID}
+      - MOD_LOG_CHANNEL_ID=${MOD_LOG_CHANNEL_ID}
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    ports:
+      - "3000:3000"
